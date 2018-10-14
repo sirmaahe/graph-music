@@ -1,59 +1,56 @@
 package lastfm
 
-import "sync"
+import (
+	"sync"
+)
 
-var DEPTH = 2
+const DEPTH = 3
 
-type Relations struct {
-    mbid string
-    name string
-    year string
-    image string
-    url string
+type ArtistWithWeight struct {
+    Artist *Artist
     weight int
-    relations []string
 }
 
-func makeAsyncCall(client *ClientLastFM, name string, artists *[]Artist, current_names *[]string, future_names *[]string) {
+func makeAsyncCall(client *ClientLastFM, name string, artists *[]*Artist, current_names *[]string, future_names *[]string) {
 	artist := client.getArtist(name)
-	*artists = append(*artists, *artist)
-
-	for _, name := range artist.relations {
+	*artists = append(*artists, artist)
+	for _, relation := range artist.relations {
 		for _, existing := range *artists {
-			if name.name == existing.name {
+			if relation.name == existing.name {
 				return
 			}
 		}
 
 		for _, existing := range *current_names {
-			if name.name == existing {
+			if relation.name == existing {
 				return
 			}
 		}
 
 		for _, existing := range *future_names {
-			if name.name == existing {
+			if relation.name == existing {
 				return
 			}
 		}
+		*future_names = append(*future_names, relation.name)
 	}
 
-	*future_names = append(*future_names, artist.name)
 }
 
-func getArtistsFor(start string) *[]Artist {
+func getArtistsFor(start string) *[]*Artist {
     var wg sync.WaitGroup
-	client := newClient("", "")
-	artists := make([]Artist, 16)
+	client := newClient(APIKEY, APISECRET)
+	artists := make([]*Artist, 0)
 
 	names := []string{start}
 	for i := 0; i < DEPTH; i++ {
-		new_names := make([]string, 9)
+		new_names := make([]string, 0)
+		wg.Add(len(names))
 		for _, name := range names {
-			go func() {
+			go func(name string) {
         		defer wg.Done()
 				makeAsyncCall(client, name, &artists, &names, &new_names)
-			}()
+			}(name)
 		}
 		wg.Wait()
 		names = new_names
@@ -61,10 +58,28 @@ func getArtistsFor(start string) *[]Artist {
 	return &artists
 }
 
-func calculateRelationsFor(name string) {
+func calculateRelationsFor(name string) *[]*ArtistWithWeight {
 	artists := getArtistsFor(name)
-
-	for _, artist := range artists {
-		
+	weightedArtists := make(map[string]*ArtistWithWeight)
+	for _, artist := range *artists {
+		weightedArtists[artist.name] = &ArtistWithWeight{
+			Artist: artist,
+			weight: 0,
+		}
 	}
+	for _, artist := range *artists {
+		for _, relation := range artist.relations {
+			thatArtist := weightedArtists[relation.name]
+			if thatArtist != nil {
+				thatArtist.weight += relation.weight
+			}
+		}
+	}
+
+	result := make([]*ArtistWithWeight, 0)
+    for _, value := range weightedArtists {
+        result = append(result, value)
+    }
+
+    return &result
 }

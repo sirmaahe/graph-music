@@ -4,7 +4,7 @@ import (
     "github.com/shkh/lastfm-go/lastfm"
 )
 
-var RELATIONS = 3
+const RELATIONS = 3
 
 type ClientLastFM struct {
     api *lastfm.Api
@@ -39,7 +39,7 @@ func (client *ClientLastFM) getArtist(name string) *Artist {
     }
 
     var relations [RELATIONS]SimilarArtist
-    for index, similar := range rawArtist.Similars{
+    for index, similar := range rawArtist.Similars[:3]{
         relations[index] = SimilarArtist{
             name: similar.Name,
             weight: RELATIONS - index,
