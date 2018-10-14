@@ -11,17 +11,17 @@ type ClientLastFM struct {
 }
 
 type SimilarArtist struct{
-    name string
-    weight int
+    Name string
+    Weight int
 }
 
 type Artist struct {
-    mbid string
-    name string
-    year string
-    image string
-    url string
-    relations [RELATIONS]SimilarArtist
+    Mbid string
+    Name string
+    Year string
+    Image string
+    Url string
+    Relations [RELATIONS]SimilarArtist
 }
 
 func newClient(key, secret string) (*ClientLastFM) {
@@ -41,16 +41,16 @@ func (client *ClientLastFM) getArtist(name string) *Artist {
     var relations [RELATIONS]SimilarArtist
     for index, similar := range rawArtist.Similars[:3]{
         relations[index] = SimilarArtist{
-            name: similar.Name,
-            weight: RELATIONS - index,
+            Name: similar.Name,
+            Weight: RELATIONS - index,
         }
     }
     return &Artist{
-        mbid: rawArtist.Mbid,
-        name: rawArtist.Name,
-        year: rawArtist.Bio.YearFormed,
-        image: rawArtist.Images[0].Url,
-        url: rawArtist.Url,
-        relations: relations,
+        Mbid: rawArtist.Mbid,
+        Name: rawArtist.Name,
+        Year: rawArtist.Bio.YearFormed,
+        Image: rawArtist.Images[0].Url,
+        Url: rawArtist.Url,
+        Relations: relations,
     }
 }

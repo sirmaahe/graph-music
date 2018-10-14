@@ -2,6 +2,7 @@ package graphql
 
 import (
 	"github.com/graphql-go/graphql"
+	"lastfm"
 )
 
 var Schema graphql.Schema
@@ -10,10 +11,16 @@ func init() {
 	queryType := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"test": &graphql.Field{
-				Type: graphql.String,
+			"artists": &graphql.Field{
+				Type: graphql.NewList(artistType),
+                Args: graphql.FieldConfigArgument{
+                    "name": &graphql.ArgumentConfig{
+                        Type: graphql.String,
+                    },
+                },
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					return "Hello world", nil
+					name, _ := p.Args["name"].(string)
+					return lastfm.CalculateRelationsFor(name), nil
 				},
 			},
 		},

@@ -8,36 +8,36 @@ const DEPTH = 3
 
 type ArtistWithWeight struct {
     Artist *Artist
-    weight int
+    Weight int
 }
 
 func makeAsyncCall(client *ClientLastFM, name string, artists *[]*Artist, current_names *[]string, future_names *[]string) {
 	artist := client.getArtist(name)
 	*artists = append(*artists, artist)
-	for _, relation := range artist.relations {
+	for _, relation := range artist.Relations {
 		for _, existing := range *artists {
-			if relation.name == existing.name {
+			if relation.Name == existing.Name {
 				return
 			}
 		}
 
 		for _, existing := range *current_names {
-			if relation.name == existing {
+			if relation.Name == existing {
 				return
 			}
 		}
 
 		for _, existing := range *future_names {
-			if relation.name == existing {
+			if relation.Name == existing {
 				return
 			}
 		}
-		*future_names = append(*future_names, relation.name)
+		*future_names = append(*future_names, relation.Name)
 	}
 
 }
 
-func getArtistsFor(start string) *[]*Artist {
+func GetArtistsFor(start string) *[]*Artist {
     var wg sync.WaitGroup
 	client := newClient(APIKEY, APISECRET)
 	artists := make([]*Artist, 0)
@@ -58,20 +58,20 @@ func getArtistsFor(start string) *[]*Artist {
 	return &artists
 }
 
-func calculateRelationsFor(name string) *[]*ArtistWithWeight {
-	artists := getArtistsFor(name)
+func CalculateRelationsFor(name string) *[]*ArtistWithWeight {
+	artists := GetArtistsFor(name)
 	weightedArtists := make(map[string]*ArtistWithWeight)
 	for _, artist := range *artists {
-		weightedArtists[artist.name] = &ArtistWithWeight{
-			Artist: artist,
-			weight: 0,
+		weightedArtists[artist.Name] = &ArtistWithWeight{
+			artist,
+			0,
 		}
 	}
 	for _, artist := range *artists {
-		for _, relation := range artist.relations {
-			thatArtist := weightedArtists[relation.name]
+		for _, relation := range artist.Relations {
+			thatArtist := weightedArtists[relation.Name]
 			if thatArtist != nil {
-				thatArtist.weight += relation.weight
+				thatArtist.Weight += relation.Weight
 			}
 		}
 	}
