@@ -13,6 +13,11 @@ type ArtistWithWeight struct {
 
 func makeAsyncCall(client *ClientLastFM, name string, artists *[]*Artist, current_names *[]string, future_names *[]string) {
 	artist := client.getArtist(name)
+
+	if artist == nil {
+		return
+	}
+
 	*artists = append(*artists, artist)
 	for _, relation := range artist.Relations {
 		for _, existing := range *artists {

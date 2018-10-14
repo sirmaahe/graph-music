@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/graphql/testutil"
-	"graphql"
+	schema "graphql"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,7 +13,7 @@ import (
 func main() {
 	// Save JSON of full schema introspection for Babel Relay Plugin to use
 	result := graphql.Do(graphql.Params{
-		Schema:        graphql.Schema,
+		Schema:        schema.Schema,
 		RequestString: testutil.IntrospectionQuery,
 	})
 	if result.HasErrors() {
@@ -24,7 +24,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("ERROR: %v", err)
 		}
-		err = ioutil.WriteFile("../data/schema.json", b, os.ModePerm)
+		err = ioutil.WriteFile("./shared/schema.json", b, os.ModePerm)
 		if err != nil {
 			log.Fatalf("ERROR: %v", err)
 		}

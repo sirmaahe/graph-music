@@ -35,7 +35,7 @@ func newClient(key, secret string) (*ClientLastFM) {
 func (client *ClientLastFM) getArtist(name string) *Artist {
     rawArtist, err := client.api.Artist.GetInfo(lastfm.P{"artist": name, "autocorrect": 1})
     if err != nil {
-        panic(err)
+        return nil
     }
 
     var relations [RELATIONS]SimilarArtist

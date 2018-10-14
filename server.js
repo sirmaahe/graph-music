@@ -1,23 +1,27 @@
-import express from 'express';
-import path from 'path';
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+const express = require('express');
+const path = require('path');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
 
 const APP_PORT = 3000;
 const GRAPHQL_PORT = 8080;
 
 // Serve the Relay app
 var compiler = webpack({
+  mode: 'development',
   entry: path.resolve(__dirname, 'js', 'app.js'),
   module: {
-    loaders: [
-      {
-        exclude: /node_modules/,
-        loader: 'babel',
-        query: {stage: 0, plugins: ['./build/babelRelayPlugin']},
-        test: /\.js$/
+    rules: [{
+      exclude: /node_modules/,
+      test: /\.js$/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets:["@babel/preset-env", "@babel/preset-react"],
+          plugins: [["relay", { "schema": "./shared/schema.json" }]]
+        }
       }
-    ]
+    }]
   },
   output: {filename: 'app.js', path: '/'}
 });

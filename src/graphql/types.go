@@ -10,7 +10,7 @@ var artistType = graphql.NewObject(
         Name: "Artist",
         Fields: graphql.Fields{
             "mbid": &graphql.Field{
-                Type: graphql.String,
+                Type: graphql.ID,
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					a := p.Source.(*lastfm.ArtistWithWeight)
 					return a.Artist.Mbid, nil

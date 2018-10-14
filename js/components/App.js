@@ -1,34 +1,35 @@
 import React from 'react';
-import Relay from 'react-relay';
+import {graphql, QueryRenderer} from 'react-relay';
+import {Space} from "./space/space";
+import environment from "../utils";
 
-class App extends React.Component {
+
+export default class App extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Widget list</h1>
-        <ul>
-          {this.props.viewer.widgets.edges.map(edge =>
-            <li key={edge.node.id}>{edge.node.name} (ID: {edge.node.id})</li>
-          )}
-        </ul>
-      </div>
+      <QueryRenderer
+        environment={environment}
+        query={graphql`
+          query AppArtistsQuery ($name:String) {
+            artists(name:$name) {
+              name
+              weight
+              url
+              image
+            }
+          }
+        `}
+        variables={{name: "slowdive"}}
+        render={({error, props}) => {
+          if (error) {
+            return <div>Error!</div>;
+          }
+          if (!props) {
+            return <div>Loading...</div>;
+          }
+          return <Space list={ props.artists }/>;
+        }}
+      />
     );
   }
 }
-
-export default Relay.createContainer(App, {
-  fragments: {
-    viewer: () => Relay.QL`
-      fragment on User {
-        widgets(first: 10) {
-          edges {
-            node {
-              id,
-              name,
-            },
-          },
-        },
-      }
-    `,
-  },
-});

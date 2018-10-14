@@ -3,3 +3,5 @@ node_modules
 npm-debug.log
 data/schema.graphql
 pkg/*
+shared/schema.json
+__generated__/*
