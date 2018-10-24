@@ -5,3 +5,6 @@ data/schema.graphql
 pkg/*
 shared/schema.json
 __generated__/*
+github.com/*
+golang.org/*
+bin/*

@@ -1,35 +1,24 @@
 import React from 'react';
-import {graphql, QueryRenderer} from 'react-relay';
-import {Space} from "./space/space";
-import environment from "../utils";
+import {SpaceContainer} from "../container/space/space";
 
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      name: ''
+    }
+  }
+
   render() {
     return (
-      <QueryRenderer
-        environment={environment}
-        query={graphql`
-          query AppArtistsQuery ($name:String) {
-            artists(name:$name) {
-              name
-              weight
-              url
-              image
-            }
-          }
-        `}
-        variables={{name: "slowdive"}}
-        render={({error, props}) => {
-          if (error) {
-            return <div>Error!</div>;
-          }
-          if (!props) {
-            return <div>Loading...</div>;
-          }
-          return <Space list={ props.artists }/>;
-        }}
-      />
+      <div>
+        <form onSubmit={(e) => {e.preventDefault(); this.setState({name: e.target.firstChild.value})}}>
+          <input type="text" placeholder="band name"/>
+          <input type="submit" value="graph this"/>
+        </form>
+        { this.state.name? <SpaceContainer name={ this.state.name }/>: ''}
+      </div>
     );
   }
 }
