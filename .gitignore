@@ -8,3 +8,4 @@ __generated__/*
 github.com/*
 golang.org/*
 bin/*
+src/lastfm/keys.go

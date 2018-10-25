@@ -27,7 +27,7 @@ export class SpaceContainer extends React.Component {
                     if (!props) {
                         return <div>Loading...</div>;
                     }
-                    return <Space list={props.artists} />;
+                    return <Space changeName={this.props.changeName} list={props.artists} />;
                 }}
             />
         );

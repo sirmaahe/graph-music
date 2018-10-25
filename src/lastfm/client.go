@@ -49,7 +49,7 @@ func (client *ClientLastFM) getArtist(name string) *Artist {
 		Mbid:      rawArtist.Mbid,
 		Name:      rawArtist.Name,
 		Year:      rawArtist.Bio.YearFormed,
-		Image:     rawArtist.Images[4].Url,
+		Image:     rawArtist.Images[len(rawArtist.Images)-1].Url,
 		Url:       rawArtist.Url,
 		Relations: relations,
 	}

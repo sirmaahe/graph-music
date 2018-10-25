@@ -56,10 +56,10 @@ var artistType = graphql.NewObject(
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					a := p.Source.(*lastfm.ArtistWithWeight)
 
-					newRelations := make([]string, 16)
+					newRelations := make([]string, 0)
 
-					for i, relation := range a.Artist.Relations {
-					    newRelations[i] = relation.Name
+					for _, relation := range a.Artist.Relations {
+					    newRelations = append(newRelations, relation.Name)
                     }
 					return newRelations, nil
 				},

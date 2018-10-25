@@ -12,12 +12,18 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{
+        minHeight: window.innerHeight,
+        backgroundColor: "#202020",
+        color: "#DFDFDF",
+        paddingLeft: "10%",
+        paddingRight: "10%",
+      }}>
         <form onSubmit={(e) => {e.preventDefault(); this.setState({name: e.target.firstChild.value})}}>
           <input type="text" placeholder="band name"/>
           <input type="submit" value="graph this"/>
         </form>
-        { this.state.name? <SpaceContainer name={ this.state.name }/>: ''}
+        { this.state.name? <SpaceContainer changeName={name => this.setState({name: name})} name={ this.state.name }/>: ''}
       </div>
     );
   }
