@@ -39,7 +39,10 @@ func (client *ClientLastFM) getArtist(name string) *Artist {
 	}
 
 	var relations [RELATIONS]SimilarArtist
-	for index, similar := range rawArtist.Similars[:RELATIONS] {
+	for index, similar := range rawArtist.Similars {
+		if index == RELATIONS {
+			break
+		}
 		relations[index] = SimilarArtist{
 			Name:   similar.Name,
 			Weight: RELATIONS - index,
