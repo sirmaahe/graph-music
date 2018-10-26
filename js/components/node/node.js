@@ -50,7 +50,8 @@ export class Node extends React.Component {
                 }}>{name}</p>
                 <a href={url} style={{
                     color: "#EFEFEF",
-                    textShadow: "0px 2px 2px black"
+                    textShadow: "0px 2px 2px black",
+                    textDecoration: "unset"
                 }}>more>></a>
             </div>
         );
