@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "scripts": {
     "start": "babel-node ./server.js",
-    "build": "webpack",
+    "build": "webpack -p",
     "update-schema": "go run cmd/update/main.go && relay-compiler --src ./js --schema ./shared/schema.json"
   },
   "dependencies": {
