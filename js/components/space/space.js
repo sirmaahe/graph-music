@@ -70,7 +70,7 @@ export class Space extends React.Component {
                     right: 0,
                     display: this.state.active? "block": "none",
                     backgroundColor: "#202020",
-                    opacity: "0.8",
+                    opacity: "0.9",
                     minWidth: window.innerWidth,
                     minHeight: document.documentElement.scrollHeight
                 }}></div>

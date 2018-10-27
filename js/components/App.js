@@ -26,7 +26,16 @@ export default class App extends React.Component {
               <input type="submit" value="graph this" />
             </form> : ""
         }
-        {this.state.name ? <SpaceContainer changeName={name => this.setState({ name: name })} name={this.state.name} /> : ''}
+        {
+          this.state.name ? <span style={{
+            position: 'relative',
+            zIndex: 100,
+            cursor: 'pointer'
+          }} onClick={e => this.setState({ name: '' })}>X</span>: ''
+        }
+        {
+          this.state.name ? <SpaceContainer changeName={name => this.setState({ name: name })} name={this.state.name} /> : ''
+        }
       </div>
     );
   }
